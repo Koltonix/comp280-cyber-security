@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.25",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "unreal_encryption",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
