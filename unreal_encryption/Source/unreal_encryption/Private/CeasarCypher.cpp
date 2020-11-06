@@ -1,5 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+//////////////////////////////////////////////////
+// Christopher Robertson 2020.
+// https://github.com/Koltonix
+// Copyright (c) 2020. All rights reserved.
+//////////////////////////////////////////////////
 
 #include "CeasarCypher.h"
 
