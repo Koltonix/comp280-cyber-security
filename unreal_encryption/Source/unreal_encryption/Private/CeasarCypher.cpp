@@ -11,8 +11,14 @@ using namespace std;
 
 CeasarCypher::CeasarCypher()
 {
-	FString encrypted = EncryptText(3, m_textToEncrypt);
+	FString encrypted = EncryptText(m_shiftKey, m_textToEncrypt);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, encrypted);
+	FString decrypted = DecryptText(m_shiftKey, encrypted);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, decrypted);
+	encrypted = EncryptText(m_shiftKey, m_textToEncrypt);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, encrypted);
+	decrypted = DecryptText(m_shiftKey, encrypted);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, decrypted);
 }
 
 CeasarCypher::~CeasarCypher()
@@ -21,9 +27,13 @@ CeasarCypher::~CeasarCypher()
 
 FString CeasarCypher::EncryptText(int key, FString text)
 {
+	// This encryption does not support upper case
+	text = text.ToLower();
+
 	map<char, char>cypher = GetShiftedAlphabet(key);
-	//[a = c]
 	FString encrypted_text = "";
+
+	// Encryption
 	for (int i = 0; i < text.Len(); i++)
 	{
 		// Key not in the alphabet
@@ -34,14 +44,36 @@ FString CeasarCypher::EncryptText(int key, FString text)
 			encrypted_text += cypher[text[i]];
 	}
 		
-
 	return encrypted_text;
 }
 
-FString CeasarCypher::DecryptText(int key, FString text)
+FString CeasarCypher::DecryptText(int key, FString encryptedText)
 {
-	return FString();
+	// This encryption does not support upper case
+	encryptedText = encryptedText.ToLower();
+
+	map<char, char>cypher = GetShiftedAlphabet(key);
+	FString decrypted_text = "";
+
+	// Inverting the map
+	map<char, char> i_cypher;
+	for (pair<char, char> e : cypher)
+		i_cypher.emplace(e.second, e.first);
+
+	// Decryption
+	for (int i = 0; i < encryptedText.Len(); i++)
+	{
+		// Key not in the alphabet
+		if (i_cypher.find(encryptedText[i]) == i_cypher.end())
+			decrypted_text += encryptedText[i];
+
+		else
+			decrypted_text += i_cypher[encryptedText[i]];
+	}
+
+	return decrypted_text;
 }
+
 
 
 map<char, char> CeasarCypher::GetShiftedAlphabet(int key)
@@ -56,7 +88,7 @@ map<char, char> CeasarCypher::GetShiftedAlphabet(int key)
 	iota(alphabet.begin(), alphabet.end(), 'a');
 	encrypted_alphabet = alphabet;
 	
-
+	// Shifting alphabet
 	for (int i = 0; i < key; i++)
 	{
 		// Inserting the last element first and then removing the last element
@@ -66,18 +98,8 @@ map<char, char> CeasarCypher::GetShiftedAlphabet(int key)
 	
 	// Assigning it to a map for ease of access
 	map<char, char> cypher_map = map<char, char>();
-	FString concatenated_shifted = "";
 	for (int i = 0; i < alphabet.size(); i++)
-	{
-		concatenated_shifted += encrypted_alphabet[i];
 		cypher_map.emplace(alphabet[i], encrypted_alphabet[i]);
-	}
-
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, concatenated_shifted);
-	}
 
 	return cypher_map;
 }
