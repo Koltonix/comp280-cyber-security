@@ -3,6 +3,7 @@
 
 #include "CypherTest.h"
 #include "CeasarCypher.h"
+#include "XORCypher.h"
 
 // Sets default values
 ACypherTest::ACypherTest()
@@ -16,7 +17,9 @@ ACypherTest::ACypherTest()
 void ACypherTest::BeginPlay()
 {
 	Super::BeginPlay();
-	CeasarCypher cypher = CeasarCypher();
+
+	// CeasarCypher cypher = CeasarCypher();
+	XORCypher xorCypher = XORCypher();
 }
 
 // Called every frame
