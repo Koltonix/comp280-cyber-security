@@ -15,11 +15,11 @@ public:
 	CeasarCypher();
 	~CeasarCypher();
 
-	char* EncryptText(char* text);
+	FString EncryptText(int key, FString text);
+	FString DecryptText(int key, FString text);
 	std::map<char, char> GetShiftedAlphabet(int key);
 
 private:
-	std::map<char, char> m_shiftedAlphabet;
-	char* m_textToEncrypt = "abc";
+	FString m_textToEncrypt = "abc def ghi jkl";
 	int m_shiftKey = 0;
 };

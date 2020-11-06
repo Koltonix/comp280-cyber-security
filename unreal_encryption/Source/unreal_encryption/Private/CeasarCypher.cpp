@@ -11,54 +11,73 @@ using namespace std;
 
 CeasarCypher::CeasarCypher()
 {
-	m_shiftedAlphabet = GetShiftedAlphabet(5);
+	FString encrypted = EncryptText(3, m_textToEncrypt);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, encrypted);
 }
 
 CeasarCypher::~CeasarCypher()
 {
 }
 
-char* CeasarCypher::EncryptText(char* text)
+FString CeasarCypher::EncryptText(int key, FString text)
 {
-	for (int i = 0; i < (sizeof(text)/sizeof(text[0])); i++)
+	map<char, char>cypher = GetShiftedAlphabet(key);
+	//[a = c]
+	FString encrypted_text = "";
+	for (int i = 0; i < text.Len(); i++)
+	{
+		// Key not in the alphabet
+		if (cypher.find(text[i]) == cypher.end())
+			encrypted_text += text[i];
+
+		else
+			encrypted_text += cypher[text[i]];
+	}
 		
 
-	return nullptr;
+	return encrypted_text;
 }
+
+FString CeasarCypher::DecryptText(int key, FString text)
+{
+	return FString();
+}
+
 
 map<char, char> CeasarCypher::GetShiftedAlphabet(int key)
 {
 	// Sanity check
-	key = key > 26 ? 26 : key;
-	key = key < 0 ? 0 : key;
-	
-	vector<char> alphabet(26);
-	iota(alphabet.begin(), alphabet.end(), 'a');
+	key = (key < 0) ? 0 : key;
 
-	vector<char> shifted_alphabet = vector<char>();
-	map<char, char> conversion_map = map<char, char>();
+	vector<char> alphabet(26);
+	vector<char> encrypted_alphabet(26);
 
 	// Source: https://stackoverflow.com/questions/49210366/vector-initialization-in-cpp
-	int start_index = (alphabet.size() - key);
-	FString concatenated_shifted = "";
+	iota(alphabet.begin(), alphabet.end(), 'a');
+	encrypted_alphabet = alphabet;
+	
 
-	// Adds the shifted values first
-	for (int i = start_index; i < alphabet.size(); i++)
+	for (int i = 0; i < key; i++)
 	{
-		shifted_alphabet.push_back(alphabet[i]);
-		concatenated_shifted += alphabet[i];
-	}
-
-	// Adds the rest of the alphabet back in without the shiften values
-	for (int i = 0; i < alphabet.size() - key; i++)
-	{
-		shifted_alphabet.push_back(alphabet[i]);
-		concatenated_shifted += alphabet[i];
+		// Inserting the last element first and then removing the last element
+		encrypted_alphabet.insert(encrypted_alphabet.begin(), encrypted_alphabet[encrypted_alphabet.size() - 1]);
+		encrypted_alphabet.erase(encrypted_alphabet.begin() + (encrypted_alphabet.size() - 1));
 	}
 	
-	// Assigns it to a map
-	for (int i = 0; i < shifted_alphabet.size(); i++)
-		conversion_map.emplace(alphabet[i], shifted_alphabet[i]);
+	// Assigning it to a map for ease of access
+	map<char, char> cypher_map = map<char, char>();
+	FString concatenated_shifted = "";
+	for (int i = 0; i < alphabet.size(); i++)
+	{
+		concatenated_shifted += encrypted_alphabet[i];
+		cypher_map.emplace(alphabet[i], encrypted_alphabet[i]);
+	}
 
-	return conversion_map;
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, concatenated_shifted);
+	}
+
+	return cypher_map;
 }
