@@ -17,11 +17,10 @@ CeasarCypher::CeasarCypher()
 	FString encrypted = EncryptText(m_shiftKey, m_textToEncrypt);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, encrypted);
 	FString decrypted = DecryptText(m_shiftKey, encrypted);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, decrypted);
-	encrypted = EncryptText(m_shiftKey, m_textToEncrypt);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, encrypted);
-	decrypted = DecryptText(m_shiftKey, encrypted);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, decrypted);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "\n" + decrypted);
+
+	map<char, char> shifted_cypher = GetShiftedAlphabet(m_shiftKey);
+	PrintShiftedCypher(shifted_cypher);
 }
 
 CeasarCypher::~CeasarCypher()
@@ -105,4 +104,19 @@ map<char, char> CeasarCypher::GetShiftedAlphabet(int key)
 		cypher_map.emplace(alphabet[i], encrypted_alphabet[i]);
 
 	return cypher_map;
+}
+
+void CeasarCypher::PrintShiftedCypher(std::map<char, char> shiftedCypher)
+{
+	FString concatenated_alphabet = "";
+	FString concatenated_cypher = "";
+
+	for (pair<char, char> e : shiftedCypher)
+	{
+		concatenated_alphabet += e.first;
+		concatenated_cypher += e.second;
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, concatenated_cypher);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, concatenated_alphabet);
 }

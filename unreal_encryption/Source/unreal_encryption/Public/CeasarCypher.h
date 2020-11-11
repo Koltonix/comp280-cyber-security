@@ -21,6 +21,7 @@ public:
 	FString EncryptText(int key, FString text);
 	FString DecryptText(int key, FString encryptedText);
 	std::map<char, char> GetShiftedAlphabet(int key);
+	void PrintShiftedCypher(std::map<char, char> shiftedCypher);
 
 private:
 	FString m_textToEncrypt = "Hello, my name is Christopher!";

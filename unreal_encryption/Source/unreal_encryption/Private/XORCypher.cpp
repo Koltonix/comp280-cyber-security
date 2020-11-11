@@ -8,9 +8,9 @@
 
 XORCypher::XORCypher()
 {
-	FString encrypted = EncryptText("ABCDE", "Hello");
+	FString encrypted = EncryptText('C', "Hello, my name is Christopher Robertson!");
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, encrypted);
-	FString decrypted = EncryptText("ABCDE", encrypted);
+	FString decrypted = EncryptText('C', encrypted);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, decrypted);
 }
 
@@ -25,7 +25,6 @@ FString XORCypher::EncryptText(char key, FString text)
 	for (int i = 0; i < text.Len(); i++)
 	{
 		text[i] = text[i] ^ key;
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, text);
 	}
 	return text;
 }
@@ -39,7 +38,6 @@ FString XORCypher::EncryptText(FString key, FString text)
 	for (int i = 0; i < text.Len(); i++)
 	{
 		text[i] = text[i] ^ key[i];
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, text);
 	}
 	return text;
 }
